@@ -4,6 +4,10 @@ const scoreText = document.getElementById("score");
 const timerText = document.getElementById("timer");
 
 const cardValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+const emojiMap = {
+    "A": "🐶", "B": "🐱", "C": "🐭", "D": "🐹",
+    "E": "🐰", "F": "🦊", "G": "🐻", "H": "🐼"
+};
 let cardArray = [...cardValues];
 let flippedCardArray = [];
 let correctCard = [];
@@ -26,55 +30,53 @@ function resetScore() {
 function setUpTimer() {
     seconds = 100;
     clearInterval(timer);
-    timer = setInterval(updateTimer, 100);
+    timer = setInterval(updateTimer, 1000);
 }
 
 function updateTimer() {
-    if(seconds == 0) {
+    if(seconds <= 0) {
         clearInterval(timer);
         gameOver = true;
+        timerText.innerHTML = "00:00";
         return;
     }
     seconds--;
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    
 }
 
 
 function cardCheck() {
-    if (gameOver) {
-        return;
-    }
-    if (isChecking || flippedCardArray.includes(this) || this.classList.contains("flipped")) {
+    if (gameOver || isChecking || this.classList.contains("flipped")) {
         return;
     }
 
-    if (flippedCardArray.length < 2) {
+    if (flippedCardArray.length < 2 && !flippedCardArray.includes(this)) {
         this.classList.add("flipped");
         flippedCardArray.push(this);
 
         if (flippedCardArray.length === 2) {
             isChecking = true;
-            if (flippedCardArray[0].getAttribute("data") !== flippedCardArray[1].getAttribute("data")) {
+            const card1 = flippedCardArray[0];
+            const card2 = flippedCardArray[1];
+
+            if (card1.getAttribute("data") !== card2.getAttribute("data")) {
                 setTimeout(() => {
-                    flippedCardArray[0].classList.remove("flipped");
-                    flippedCardArray[1].classList.remove("flipped");
+                    card1.classList.remove("flipped");
+                    card2.classList.remove("flipped");
                     flippedCardArray = [];
                     isChecking = false;
                 }, 1000);
             } else {
                 setScore(10);
-                correctCard.push(flippedCardArray[0]);
-                correctCard.push(flippedCardArray[1]);
-                if (correctCard.length == cardArray.length) {
-                    setTimeout(() => {
-                        setBoard()
-                    }, 500);
-                }
+                correctCard.push(card1, card2);
                 flippedCardArray = [];
                 isChecking = false;
+
+                if (correctCard.length === cardArray.length) {
+                    clearInterval(timer);
+                }
             }
         }
     }
@@ -82,24 +84,34 @@ function cardCheck() {
 
 function setBoard() {
     gameOver = false;
-    correctCard = []
+    correctCard = [];
+    flippedCardArray = [];
+    isChecking = false;
     board.innerHTML = "";
-    setUpTimer();
     resetScore();
-    for (let i = cardArray.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [cardArray[i], cardArray[j]] = [cardArray[j], cardArray[i]];
-    }
+    setUpTimer();
+
+    cardArray.sort(() => 0.5 - Math.random());
 
     for (let i = 0; i < cardArray.length; i++) {
         let card = document.createElement("div");
         card.classList.add("card");
         card.setAttribute("data", cardArray[i]);
-        card.appendChild(document.createTextNode(cardArray[i]));
+
+        let cardFront = document.createElement("div");
+        cardFront.classList.add("card-face", "card-front");
+        cardFront.textContent = emojiMap[cardArray[i]]; // Use emoji for display
+
+        let cardBack = document.createElement("div");
+        cardBack.classList.add("card-face", "card-back");
+
+        card.appendChild(cardFront);
+        card.appendChild(cardBack);
+
         card.addEventListener("click", cardCheck);
         board.appendChild(card);
     }
 }
 
-// document.addEventListener("DOMContentLoaded", setBoard);
+document.addEventListener("DOMContentLoaded", setBoard);
 resetBtn.addEventListener("click", setBoard);
