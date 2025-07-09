@@ -1,13 +1,52 @@
 const board = document.getElementById("game-board");
 const resetBtn = document.getElementById("restart");
+const scoreText = document.getElementById("score");
+const timerText = document.getElementById("timer");
 
 const cardValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
 let cardArray = [...cardValues];
 let flippedCardArray = [];
+let correctCard = [];
 let isChecking = false;
+let score = 0;
+let seconds;
+let timer;
+let gameOver = false;
+
+function setScore(value) {
+    score += value;
+    scoreText.innerHTML = score;
+}
+
+function resetScore() {
+    score = 0;
+    scoreText.innerHTML = score;
+}
+
+function setUpTimer() {
+    seconds = 100;
+    clearInterval(timer);
+    timer = setInterval(updateTimer, 100);
+}
+
+function updateTimer() {
+    if(seconds == 0) {
+        clearInterval(timer);
+        gameOver = true;
+        return;
+    }
+    seconds--;
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    timerText.innerHTML = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    
+}
+
 
 function cardCheck() {
-    // Prevent clicking if already checking or card is already flipped
+    if (gameOver) {
+        return;
+    }
     if (isChecking || flippedCardArray.includes(this) || this.classList.contains("flipped")) {
         return;
     }
@@ -17,32 +56,41 @@ function cardCheck() {
         flippedCardArray.push(this);
 
         if (flippedCardArray.length === 2) {
-            isChecking = true; // Lock further clicks
+            isChecking = true;
             if (flippedCardArray[0].getAttribute("data") !== flippedCardArray[1].getAttribute("data")) {
-                // Non-matching cards: delay flip-back to allow animation
                 setTimeout(() => {
                     flippedCardArray[0].classList.remove("flipped");
                     flippedCardArray[1].classList.remove("flipped");
                     flippedCardArray = [];
-                    isChecking = false; // Unlock clicks
-                }, 1000); // Adjust delay (1000ms = 1s) to match your CSS animation duration
+                    isChecking = false;
+                }, 1000);
             } else {
-                // Matching cards: keep flipped and reset array
+                setScore(10);
+                correctCard.push(flippedCardArray[0]);
+                correctCard.push(flippedCardArray[1]);
+                if (correctCard.length == cardArray.length) {
+                    setTimeout(() => {
+                        setBoard()
+                    }, 500);
+                }
                 flippedCardArray = [];
-                isChecking = false; // Unlock clicks
+                isChecking = false;
             }
         }
     }
 }
 
-function start() {
+function setBoard() {
+    gameOver = false;
+    correctCard = []
     board.innerHTML = "";
+    setUpTimer();
+    resetScore();
     for (let i = cardArray.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [cardArray[i], cardArray[j]] = [cardArray[j], cardArray[i]];
     }
 
-    // Create card elements
     for (let i = 0; i < cardArray.length; i++) {
         let card = document.createElement("div");
         card.classList.add("card");
@@ -53,5 +101,5 @@ function start() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", start);
-resetBtn.addEventListener("click", start);
+// document.addEventListener("DOMContentLoaded", setBoard);
+resetBtn.addEventListener("click", setBoard);
