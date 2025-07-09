@@ -42,14 +42,14 @@ function setScore(value) {
 }
 
 function resetScore() {
-    score = 100;
+    score = 0;
     scoreText.innerHTML = score;
 }
 
 function setUpTimer() {
-    seconds = 100;
+    seconds = 181;
     clearInterval(timer);
-    timer = setInterval(updateTimer, 100);
+    timer = setInterval(updateTimer, 1000);
 }
 
 function updateTimer() {
@@ -84,7 +84,7 @@ function cardCheck() {
                     card2.classList.remove("flipped");
                     flippedCardArray = [];
                     isChecking = false;
-                }, 1000);
+                }, 600);
             } else {
                 setScore(10);
                 correctCard.push(card1, card2);
@@ -92,19 +92,46 @@ function cardCheck() {
                 isChecking = false;
 
                 if (correctCard.length === cardArray.length) {
-                    clearInterval(timer);
+                    seconds += 50;
+                    
+                    setTimeout(() => {
+                        nextGame();
+                    }, 600);
                 }
             }
         }
     }
 }
 
+function nextGame() {
+    correctCard = [];
+    board.innerHTML = "";
+    for (let i = 0; i < cardArray.length; i++) {
+        let card = document.createElement("div");
+        card.classList.add("card");
+        card.setAttribute("data", cardArray[i]);
+
+        let cardFront = document.createElement("div");
+        cardFront.classList.add("card-face", "card-front");
+        cardFront.textContent = emojiMap[cardArray[i]]; // Use emoji for display
+
+        let cardBack = document.createElement("div");
+        cardBack.classList.add("card-face", "card-back");
+
+        card.appendChild(cardFront);
+        card.appendChild(cardBack);
+
+        card.addEventListener("click", cardCheck);
+        board.appendChild(card);
+    }
+}
+
 function setBoard() {
+    board.innerHTML = "";
     gameOverBool = false;
     correctCard = [];
     flippedCardArray = [];
     isChecking = false;
-    board.innerHTML = "";
     resetScore();
     setUpTimer();
     gameOverText.hidden = true;
