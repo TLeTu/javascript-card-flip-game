@@ -3,6 +3,7 @@ const resetBtn = document.getElementById("restart");
 const scoreText = document.getElementById("score");
 const timerText = document.getElementById("timer");
 const highscoreText = document.getElementById("highscore");
+const gameOverText = document.getElementById("game-over");
 
 const cardValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
 const emojiMap = {
@@ -17,6 +18,18 @@ let score = 0;
 let seconds;
 let timer;
 let gameOverBool = false;
+
+
+function gameOver() {
+    board.innerHTML = "";
+    gameOverText.hidden = false;
+    clearInterval(timer);
+    gameOverBool = true;
+    timerText.innerHTML = "00:00";
+    if (score > localStorage.getItem('highscore')){ 
+        setHighScore()
+    }
+}
 
 function setHighScore() {
     localStorage.setItem('highscore', score);
@@ -52,7 +65,7 @@ function updateTimer() {
 
 
 function cardCheck() {
-    if (gameOver || isChecking || this.classList.contains("flipped")) {
+    if (gameOverBool || isChecking || this.classList.contains("flipped")) {
         return;
     }
 
@@ -87,13 +100,14 @@ function cardCheck() {
 }
 
 function setBoard() {
-    gameOver = false;
+    gameOverBool = false;
     correctCard = [];
     flippedCardArray = [];
     isChecking = false;
     board.innerHTML = "";
     resetScore();
     setUpTimer();
+    gameOverText.hidden = true;
 
     cardArray.sort(() => 0.5 - Math.random());
 
@@ -117,18 +131,11 @@ function setBoard() {
     }
 }
 
-function gameOver() {
-    clearInterval(timer);
-    gameOverBool = true;
-    timerText.innerHTML = "00:00";
-    if (score > localStorage.getItem('highscore')){ 
-        setHighScore()
-    }
-}
 
 document.addEventListener("DOMContentLoaded", function () {
     if(localStorage.getItem('highscore')) {
         highscoreText.innerHTML = localStorage.getItem('highscore');
     }
+    gameOverText.hidden = true;
 });
 resetBtn.addEventListener("click", setBoard);

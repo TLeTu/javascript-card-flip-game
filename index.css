@@ -121,3 +121,39 @@ body {
     font-size: 1em;
   }
 }
+
+#game-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#game-name {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 4.5em;
+    font-weight: normal;
+    color: #ffc312;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, -2px -2px 0 #000, 4px 4px 0px rgba(0,0,0,0.2);
+    display: block;
+    margin-bottom: 10px;
+    transform: rotate(-2deg);
+}
+
+#game-title > span:not(#game-name) {
+    font-size: 1.4em;
+    background: #ff6b6b;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transform: rotate(2deg);
+    display: inline-block;
+}
+
+#game-over {
+    font-size: 4em;
+    font-weight: bold;
+    color: #ff4757;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    margin-top: 20px;
+    
+}
