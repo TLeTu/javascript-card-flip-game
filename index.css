@@ -6,9 +6,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 100vh;
     margin: 0;
+    padding-top: 30px;
 }
 
 #game-info {
@@ -147,13 +148,15 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     transform: rotate(2deg);
     display: inline-block;
+    margin-bottom: 100px;
 }
 
 #game-over {
-    font-size: 4em;
-    font-weight: bold;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 6em;
+    font-weight: normal;
     color: #ff4757;
-    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 6px 6px 0px rgba(0,0,0,0.2);
     margin-top: 20px;
-    
+    transform: rotate(-5deg) scale(1.1);
 }
