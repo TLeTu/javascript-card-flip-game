@@ -2,11 +2,12 @@ const board = document.getElementById("game-board");
 const resetBtn = document.getElementById("restart");
 const scoreText = document.getElementById("score");
 const timerText = document.getElementById("timer");
+const highscoreText = document.getElementById("highscore");
 
-const cardValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+const cardValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
 const emojiMap = {
-    "A": "🐶", "B": "🐱", "C": "🐭", "D": "🐹",
-    "E": "🐰", "F": "🦊", "G": "🐻", "H": "🐼"
+    1: "🐶", 2: "🐱", 3: "🐭", 4: "🐹",
+    5: "🐰", 6: "🦊", 7: "🐻", 8: "🐼"
 };
 let cardArray = [...cardValues];
 let flippedCardArray = [];
@@ -15,7 +16,12 @@ let isChecking = false;
 let score = 0;
 let seconds;
 let timer;
-let gameOver = false;
+let gameOverBool = false;
+
+function setHighScore() {
+    localStorage.setItem('highscore', score);
+    highscoreText.innerHTML = localStorage.getItem('highscore');
+}
 
 function setScore(value) {
     score += value;
@@ -23,21 +29,19 @@ function setScore(value) {
 }
 
 function resetScore() {
-    score = 0;
+    score = 100;
     scoreText.innerHTML = score;
 }
 
 function setUpTimer() {
     seconds = 100;
     clearInterval(timer);
-    timer = setInterval(updateTimer, 1000);
+    timer = setInterval(updateTimer, 100);
 }
 
 function updateTimer() {
     if(seconds <= 0) {
-        clearInterval(timer);
-        gameOver = true;
-        timerText.innerHTML = "00:00";
+        gameOver();
         return;
     }
     seconds--;
@@ -113,5 +117,18 @@ function setBoard() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", setBoard);
+function gameOver() {
+    clearInterval(timer);
+    gameOverBool = true;
+    timerText.innerHTML = "00:00";
+    if (score > localStorage.getItem('highscore')){ 
+        setHighScore()
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    if(localStorage.getItem('highscore')) {
+        highscoreText.innerHTML = localStorage.getItem('highscore');
+    }
+});
 resetBtn.addEventListener("click", setBoard);
