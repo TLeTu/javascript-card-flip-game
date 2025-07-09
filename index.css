@@ -1,0 +1,26 @@
+body {
+    background-color: #afafaf;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  gap: 10px;
+  justify-content: center;
+}
+.card {
+  width: 100px;
+  height: 100px;
+  background: #ff0000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.card.flipped {
+  transform: rotateY(180deg);
+  background: #ffffff;
+}
+@media (max-width: 600px) {
+  .card { width: 80px; height: 80px; }
+  #game-board { grid-template-columns: repeat(4, 80px); }
+}
