@@ -46,6 +46,22 @@ body {
     transform: scale(1.05);
 }
 
+#mute-btn {
+    background-color: #48dbfb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#mute-btn:hover {
+    background-color: #0abde3;
+    transform: scale(1.05);
+}
+
 #game-board {
   display: grid;
   grid-template-columns: repeat(4, 100px);
@@ -105,6 +121,20 @@ body {
   content: '';
 }
 
+@media (max-width: 768px) {
+  #game-board {
+    grid-template-columns: repeat(4, 90px);
+    gap: 12px;
+  }
+  .card, .card-face {
+    width: 90px;
+    height: 90px;
+  }
+  #game-info {
+    width: 85%;
+  }
+}
+
 @media (max-width: 600px) {
   #game-board {
     grid-template-columns: repeat(4, 80px);
@@ -120,6 +150,56 @@ body {
   }
   #game-info span {
     font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 15px;
+  }
+  #game-name {
+    font-size: 3em;
+  }
+  #game-title > span:not(#game-name) {
+    font-size: 1.2em;
+    padding: 6px 15px;
+    margin-bottom: 50px;
+  }
+  #game-info {
+    flex-direction: column;
+    width: 90%;
+    padding: 15px;
+  }
+  #game-info span {
+    margin-bottom: 10px;
+  }
+  #game-board {
+    grid-template-columns: repeat(4, 70px);
+    gap: 8px;
+  }
+  .card, .card-face {
+    width: 70px;
+    height: 70px;
+  }
+  .card-face {
+    font-size: 2em;
+  }
+  #game-over {
+    font-size: 4em;
+  }
+}
+
+@media (max-width: 360px) {
+  #game-name {
+    font-size: 2.5em;
+  }
+  #game-board {
+    grid-template-columns: repeat(4, 60px);
+    gap: 6px;
+  }
+  .card, .card-face {
+    width: 60px;
+    height: 60px;
   }
 }
 

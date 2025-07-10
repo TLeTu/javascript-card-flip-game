@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Card Game</title>
+    <title>Animal Match</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,11 +21,14 @@
       <span>Scores: <span id="score">0</span></span>
       <span>Time: <span id="timer">00:00</span></span>
       <button id="restart">New Game</button>
+      <button id="mute-btn">Mute</button>
     </div>
     <div id="game-board"></div>
     <div>
         <span id="game-over">Game Over</span>
     </div>
+    <audio id="background-music" src="assets/daisy.mp3" loop></audio>
+    <audio id="tap-sound" src="assets/tap.wav"></audio>
     <script src="index.js"></script>
   </body>
 </html>

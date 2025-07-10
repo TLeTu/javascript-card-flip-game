@@ -4,6 +4,10 @@ const scoreText = document.getElementById("score");
 const timerText = document.getElementById("timer");
 const highscoreText = document.getElementById("highscore");
 const gameOverText = document.getElementById("game-over");
+const backgroundMusic = document.getElementById("background-music");
+const muteBtn = document.getElementById("mute-btn");
+const tapSound = document.getElementById("tap-sound");
+let isMusicPlaying = false;
 
 const cardValues = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8];
 const emojiMap = {
@@ -71,6 +75,7 @@ function cardCheck() {
 
     if (flippedCardArray.length < 2 && !flippedCardArray.includes(this)) {
         this.classList.add("flipped");
+        tapSound.play();
         flippedCardArray.push(this);
 
         if (flippedCardArray.length === 2) {
@@ -127,6 +132,12 @@ function nextGame() {
 }
 
 function setBoard() {
+    if (!isMusicPlaying) {
+        backgroundMusic.play();
+        backgroundMusic.volume = 0.5;
+        isMusicPlaying = true;
+        muteBtn.textContent = "Mute";
+    };
     board.innerHTML = "";
     gameOverBool = false;
     correctCard = [];
@@ -164,5 +175,18 @@ document.addEventListener("DOMContentLoaded", function () {
         highscoreText.innerHTML = localStorage.getItem('highscore');
     }
     gameOverText.hidden = true;
-});
+    });
 resetBtn.addEventListener("click", setBoard);
+
+muteBtn.addEventListener("click", () => {
+    if (backgroundMusic.paused) {
+        backgroundMusic.play();
+        backgroundMusic.volume = 0.5;
+        isMusicPlaying = true;
+        muteBtn.textContent = "Mute";
+    } else {
+        backgroundMusic.pause();
+        isMusicPlaying = false;
+        muteBtn.textContent = "Unmute";
+    }
+});
