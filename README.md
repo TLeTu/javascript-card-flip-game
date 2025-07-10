@@ -1,1 +1,3 @@
-# javascript-card-flip-game
+# Animal Match
+## DEMO:
+https://imamonke.itch.io/animal-match
